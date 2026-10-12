@@ -7,8 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.85);
+            --bg-color: #050811;
+            --card-bg: rgba(15, 23, 42, 0.85);
             --accent-color: #6366f1;
             --accent-hover: #4f46e5;
             --text-color: #f8fafc;
@@ -24,22 +24,39 @@
             font-family: 'Poppins', sans-serif;
         }
 
+        /* Mroczne animowane tło z piorunami i mgłą */
         body {
-            background: #000 url('https://media.giphy.com/media/t745cR6OchdHG/giphy.gif') no-repeat center center fixed;
+            background-color: #020617;
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 60%),
+                url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1920&auto=format&fit=crop'); /* Mroczny las nocą */
             background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             color: var(--text-color);
             min-height: 100vh;
             padding: 20px;
             position: relative;
+            overflow-x: hidden;
         }
 
-        /* Dark overlay for readability */
+        /* Efekt błyskawic piorunów co jakiś czas */
+        @keyframes lightning {
+            0%, 90%, 94%, 98%, 100% {
+                filter: brightness(1);
+            }
+            92%, 96% {
+                filter: brightness(2.2) contrast(1.2);
+            }
+        }
+
         body::before {
             content: '';
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(15, 23, 42, 0.75);
+            background: rgba(3, 7, 18, 0.8);
             z-index: -1;
+            animation: lightning 8s infinite;
         }
 
         header {
@@ -53,7 +70,7 @@
             font-size: 2.5rem;
             margin-bottom: 10px;
             color: var(--accent-color);
-            text-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+            text-shadow: 0 0 15px rgba(99, 102, 241, 0.6);
         }
 
         .stats-bar {
@@ -74,23 +91,38 @@
             right: 0;
             top: 0;
             display: flex;
+            align-items: center;
             gap: 10px;
-        }
-
-        .tool-btn {
             background: rgba(15, 23, 42, 0.8);
-            border: 1px solid var(--accent-color);
-            color: white;
-            padding: 6px 14px;
+            padding: 6px 12px;
             border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.3s;
+            border: 1px solid var(--accent-color);
             backdrop-filter: blur(5px);
         }
 
-        .tool-btn:hover {
-            background: var(--accent-color);
+        .tool-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .volume-slider {
+            width: 70px;
+            accent-color: var(--accent-color);
+            cursor: pointer;
+        }
+
+        .admin-btn {
+            background: transparent;
+            border: 1px solid var(--text-muted);
+            color: var(--text-muted);
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
         }
 
         .admin-panel {
@@ -327,16 +359,20 @@
 </head>
 <body>
 
-    <!-- Odtwarzacz audio w tle -->
-    <audio id="bg-music" loop src="https://cdn.pixabay.com/download/audio/2022/05/16/audio_db6591201e.mp3?filename=rain-and-thunder-113217.mp3"></audio>
+    <!-- Odtwarzacz audio w tle (ustawiony domyślnie na 50% głośności) -->
+    <audio id="bg-music" loop src="https://cdn.pixabay.com/download/audio/2022/05/16/audio_db6591201e.mp3?filename=rain-and-thunder-113217.mp3" preload="auto"></audio>
 
     <header>
-        <div class="header-tools">
-            <button class="tool-btn" onclick="toggleMusic()">🎵 Muzyka: WYŁ</button>
-            <button class="tool-btn" onclick="toggleAdmin()">⚙ Admin</button>
+        <div style="position: absolute; right: 0; top: 0; display: flex; gap: 10px;">
+            <div class="header-tools">
+                <button class="tool-btn" id="music-btn" onclick="toggleMusic()">🎵 WYŁ</button>
+                <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.05" value="0.5" oninput="changeVolume(this.value)" title="Głośność muzyki">
+            </div>
+            <button class="admin-btn" onclick="toggleAdmin()">⚙ Admin</button>
         </div>
+
         <h1>🎮 Moje Gry Perchance</h1>
-        <p>Graj, testuj i zostaw opinię w klimatycznej atmosferze!</p>
+        <p>Graj, testuj i zostaw opinię w mrocznym klimacie!</p>
         <div class="stats-bar">
             <span>👁 Odwiedzin strony: <strong id="site-views">...</strong></span>
         </div>
@@ -413,9 +449,30 @@
     </div>
 
     <script>
-        const ADMIN_PASSWORD = "bebospl1984";
+        const ADMIN_PASSWORD = "twojehaslo123";
         let isAdmin = false;
         let musicPlaying = false;
+
+        // Ustawienie początkowej głośności na 50%
+        const music = document.getElementById('bg-music');
+        music.volume = 0.5;
+
+        function toggleMusic() {
+            const btn = document.getElementById('music-btn');
+
+            if (musicPlaying) {
+                music.pause();
+                btn.innerText = "🎵 WYŁ";
+            } else {
+                music.play();
+                btn.innerText = "🎵 WŁ";
+            }
+            musicPlaying = !musicPlaying;
+        }
+
+        function changeVolume(val) {
+            music.volume = val;
+        }
 
         let games = JSON.parse(localStorage.getItem('perchance_games')) || [
             {
@@ -432,20 +489,6 @@
         let chatMessages = JSON.parse(localStorage.getItem('perchance_chat')) || [
             { author: "System", text: "Witaj na czacie! Miłej gry!" }
         ];
-
-        function toggleMusic() {
-            const music = document.getElementById('bg-music');
-            const btn = document.querySelectorAll('.tool-btn')[0];
-
-            if (musicPlaying) {
-                music.pause();
-                btn.innerText = "🎵 Muzyka: WYŁ";
-            } else {
-                music.play();
-                btn.innerText = "🎵 Muzyka: WŁ";
-            }
-            musicPlaying = !musicPlaying;
-        }
 
         function updatePageViews() {
             let views = parseInt(localStorage.getItem('site_views') || "0") + 1;
