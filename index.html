@@ -1,447 +1,407 @@
 <!DOCTYPE html>
-<html lang="pl" class="dark">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mój Gamingowy Hub Perchance</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        darkBg: '#0b0f19',
-                        cardBg: '#131c31',
-                        accentNeon: '#10b981',
-                        accentHover: '#059669',
-                        perchancePurple: '#8b5cf6'
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    <!-- FontAwesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Moje Gry Perchance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #6366f1;
+            --accent-hover: #4f46e5;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --danger: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            padding: 20px;
         }
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+
+        header {
+            max-width: 1000px;
+            margin: 0 auto 30px;
+            text-align: center;
+            position: relative;
         }
-        ::-webkit-scrollbar-track {
-            background: #0b0f19;
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--accent-color);
         }
-        ::-webkit-scrollbar-thumb {
-            background: #1f293d;
+
+        .stats-bar {
+            background: var(--card-bg);
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-flex;
+            gap: 20px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+
+        .admin-btn {
+            position: absolute;
+            right: 0;
+            top: 0;
+            background: transparent;
+            border: 1px solid var(--text-muted);
+            color: var(--text-muted);
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .admin-panel {
+            max-width: 800px;
+            margin: 0 auto 30px;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            display: none;
+            border: 2px solid var(--accent-color);
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-muted);
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #334155;
+            background: #0f172a;
+            color: white;
+        }
+
+        button.btn-primary {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+        }
+
+        .games-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .game-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #334155;
+        }
+
+        .game-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .game-info {
+            padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-title {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        .game-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            flex: 1;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .play-link {
+            background: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .clicks-count {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Comments section */
+        .comments-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #334155;
+        }
+
+        .comment-item {
+            background: #0f172a;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+
+        .comment-author {
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .add-comment {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .add-comment input {
+            padding: 6px;
+            font-size: 0.85rem;
+        }
+
+        .add-comment button {
+            background: var(--accent-color);
+            border: none;
+            color: white;
+            padding: 0 10px;
             border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #374151;
+            cursor: pointer;
         }
     </style>
 </head>
-<body class="bg-darkBg text-slate-100 min-h-screen flex flex-col selection:bg-emerald-500 selection:text-white">
+<body>
 
-    <!-- Header -->
-    <header class="border-b border-slate-800/80 bg-darkBg/80 backdrop-blur-md sticky top-0 z-30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-emerald-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                    <i class="fa-solid fa-gamepad text-xl text-slate-950"></i>
-                </div>
-                <div>
-                    <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Perchance Hub</h1>
-                    <p class="text-xs text-slate-400">Twoja kolekcja gier w jednym miejscu</p>
-                </div>
-            </div>
-            
-            <div class="flex items-center space-x-4">
-                <button onclick="openModal()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-semibold px-4 py-2.5 rounded-xl shadow-lg shadow-emerald-500/20 transition-all transform active:scale-95 flex items-center space-x-2 text-sm">
-                    <i class="fa-solid fa-plus"></i>
-                    <span>Dodaj grę</span>
-                </button>
-            </div>
+    <header>
+        <button class="admin-btn" onclick="toggleAdmin()">⚙ Admin</button>
+        <h1>🎮 Moje Gry Perchance</h1>
+        <p>Graj, testuj i zostaw opinię!</p>
+        <div class="stats-bar">
+            <span>👁 Odwiedzin strony: <strong id="site-views">...</strong></span>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
-        <!-- Search and Filter Bar -->
-        <div class="flex flex-col md:flex-row gap-4 mb-8 justify-between items-stretch md:items-center">
-            <!-- Search input -->
-            <div class="relative flex-grow max-w-md">
-                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </span>
-                <input type="text" id="searchInput" oninput="filterGames()" placeholder="Szukaj gry po tytule lub opisie..." 
-                    class="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-sm">
+    <!-- Panel dodawania gier (tylko dla Admina) -->
+    <div id="admin-panel" class="admin-panel">
+        <h3>Dodaj Nową Grę</h3>
+        <form id="add-game-form" onsubmit="addGame(event)">
+            <div class="form-group">
+                <label>Tytuł gry</label>
+                <input type="text" id="title" required>
             </div>
-
-            <!-- Categories Filter -->
-            <div id="categoryFilters" class="flex flex-wrap gap-2 items-center">
-                <button onclick="filterByCategory('Wszystkie')" class="category-btn px-3.5 py-1.5 rounded-lg text-xs font-medium bg-emerald-500 text-slate-950 transition-all shadow-sm" data-category="Wszystkie">Wszystkie</button>
+            <div class="form-group">
+                <label>Opis</label>
+                <textarea id="desc" rows="3" required></textarea>
             </div>
-        </div>
-
-        <!-- Games Grid -->
-        <div id="gamesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Dynamically populated via JS -->
-        </div>
-
-        <!-- Empty State -->
-        <div id="emptyState" class="hidden flex-col items-center justify-center py-20 text-center">
-            <div class="w-20 h-20 bg-slate-900 border border-slate-800 rounded-2xl flex items-center justify-center mb-4 text-slate-500 text-3xl">
-                <i class="fa-solid fa-ghost"></i>
+            <div class="form-group">
+                <label>Link do gry Perchance</label>
+                <input type="url" id="url" required>
             </div>
-            <h3 class="text-lg font-semibold text-slate-300 mb-1">Brak gier w kolekcji</h3>
-            <p class="text-sm text-slate-500 max-w-sm mb-6">Dodaj swoją pierwszą grę z Perchance, klikając przycisk powyżej!</p>
-            <button onclick="openModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium px-4 py-2 rounded-xl text-sm transition-all border border-slate-700">
-                Dodaj pierwszą grę
-            </button>
-        </div>
-    </main>
-
-    <!-- Modal Add/Edit Game -->
-    <div id="gameModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl transform scale-95 transition-transform duration-300" id="modalContent">
-            <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
-                <h3 id="modalTitle" class="text-lg font-bold text-slate-100 flex items-center space-x-2">
-                    <i class="fa-solid fa-gamepad text-emerald-400"></i>
-                    <span>Dodaj nową grę</span>
-                </h3>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-200 transition-colors w-8 h-8 rounded-lg flex items-center justify-center bg-slate-800/50 hover:bg-slate-800">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+            <div class="form-group">
+                <label>URL Okładki/Grafiki (opcjonalnie)</label>
+                <input type="url" id="image" placeholder="https://via.placeholder.com/300x180">
             </div>
-            <form id="gameForm" onsubmit="handleFormSubmit(event)" class="p-6 space-y-4">
-                <input type="hidden" id="gameId">
-                
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Tytuł gry *</label>
-                    <input type="text" id="gameTitle" required placeholder="np. Kosmiczny Wyścig" 
-                        class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-sm">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Link do Perchance *</label>
-                    <input type="url" id="gameLink" required placeholder="https://perchance.org/twoja-gra" 
-                        class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-sm">
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Kategoria</label>
-                        <input type="text" id="gameCategory" placeholder="np. RPG, Przygodowa" 
-                            class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Ikona / Emoji</label>
-                        <input type="text" id="gameEmoji" placeholder="🎲 lub 🚀" maxlength="4" value="🎮"
-                            class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-sm text-center">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Krótki opis</label>
-                    <textarea id="gameDescription" rows="3" placeholder="Napisz krótko, o czym jest ta gra..." 
-                        class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-sm resize-none"></textarea>
-                </div>
-
-                <div class="pt-2 flex items-center justify-end space-x-3">
-                    <button type="button" onclick="closeModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium rounded-xl text-sm transition-all">
-                        Anuluj
-                    </button>
-                    <button type="submit" class="px-5 py-2 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-semibold rounded-xl text-sm transition-all shadow-lg shadow-emerald-500/20">
-                        Zapisz grę
-                    </button>
-                </div>
-            </form>
-        </div>
+            <button type="submit" class="btn-primary">Opublikuj Grę</button>
+        </form>
     </div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 border border-slate-800 text-slate-100 px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3">
-        <div id="toastIcon" class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs">
-            <i class="fa-solid fa-check"></i>
-        </div>
-        <span id="toastMessage" class="text-sm font-medium">Operacja zakończona sukcesem</span>
-    </div>
+    <!-- Lista gier -->
+    <div class="games-grid" id="games-container"></div>
 
-    <!-- JavaScript Application Logic -->
     <script>
-        // Initial mock data if localStorage is empty
-        const defaultGames = [
+        // Domyślne hasło admina (możesz zmienić poniżej)
+        const ADMIN_PASSWORD = "twojehaslo123";
+        let isAdmin = false;
+
+        // Domyślna lista gier
+        let games = JSON.parse(localStorage.getItem('perchance_games')) || [
             {
-                id: '1',
-                title: 'Cyberpunkowy Generator Postaci',
-                link: 'https://perchance.org',
-                category: 'RPG',
-                emoji: '🤖',
-                description: 'Stwórz unikalnego bohatera w mrocznym świecie przyszłości z unikalnymi wszczepami.'
-            },
-            {
-                id: '2',
-                title: 'Wielki Quiz Wiedzy Fantastycznej',
-                link: 'https://perchance.org',
-                category: 'Quiz',
-                emoji: '🔮',
-                description: 'Sprawdź swoją wiedzę o smokach, magii i starożytnych artefaktach.'
-            },
-            {
-                id: '3',
-                title: 'Symulator Przetrwania w Kosmosie',
-                link: 'https://perchance.org',
-                category: 'Przetrwanie',
-                emoji: '🚀',
-                description: 'Zarządzaj zasobami statku kosmicznego po awarii napędu poddźwiękowego.'
+                id: 1,
+                title: "Przykładowa Gra 1",
+                desc: "Opis przykładowej gry stworzonej na platformie Perchance.",
+                url: "https://perchance.org",
+                image: "https://picsum.photos/300/180?random=1",
+                clicks: 0,
+                comments: [
+                    { author: "Gracz", text: "Fajna gierka!" }
+                ]
             }
         ];
 
-        let games = [];
-        let currentCategory = 'Wszystkie';
+        // Zliczanie odwiedzin strony
+        function updatePageViews() {
+            let views = parseInt(localStorage.getItem('site_views') || "0") + 1;
+            localStorage.setItem('site_views', views);
+            document.getElementById('site-views').innerText = views;
+        }
 
-        // Load data on startup
-        function initApp() {
-            const stored = localStorage.getItem('perchance_hub_games');
-            if (stored) {
-                try {
-                    games = JSON.parse(stored);
-                } catch(e) {
-                    games = defaultGames;
+        function toggleAdmin() {
+            if (!isAdmin) {
+                let pass = prompt("Podaj hasło administratora:");
+                if (pass === ADMIN_PASSWORD) {
+                    isAdmin = true;
+                    document.getElementById('admin-panel').classList.add('active');
+                    alert("Zalogowano jako Admin!");
+                    renderGames();
+                } else if (pass !== null) {
+                    alert("Błędne hasło!");
                 }
             } else {
-                games = defaultGames;
-                saveGames();
+                isAdmin = false;
+                document.getElementById('admin-panel').classList.remove('active');
+                renderGames();
             }
-            renderCategories();
+        }
+
+        function addGame(e) {
+            e.preventDefault();
+            const newGame = {
+                id: Date.now(),
+                title: document.getElementById('title').value,
+                desc: document.getElementById('desc').value,
+                url: document.getElementById('url').value,
+                image: document.getElementById('image').value || 'https://via.placeholder.com/300x180?text=Brak+Grafiki',
+                clicks: 0,
+                comments: []
+            };
+
+            games.push(newGame);
+            saveAndRender();
+            document.getElementById('add-game-form').reset();
+        }
+
+        function trackClick(id) {
+            let game = games.find(g => g.id === id);
+            if (game) {
+                game.clicks = (game.clicks || 0) + 1;
+                saveAndRender();
+            }
+        }
+
+        function deleteGame(id) {
+            if (confirm("Czy na pewno chcesz usunąć tę grę?")) {
+                games = games.filter(g => g.id !== id);
+                saveAndRender();
+            }
+        }
+
+        function addComment(gameId) {
+            const authorInput = document.getElementById(`author-${gameId}`);
+            const textInput = document.getElementById(`text-${gameId}`);
+
+            if (!authorInput.value.trim() || !textInput.value.trim()) return;
+
+            let game = games.find(g => g.id === gameId);
+            if (game) {
+                if (!game.comments) game.comments = [];
+                game.comments.push({
+                    author: authorInput.value.trim(),
+                    text: textInput.value.trim()
+                });
+                saveAndRender();
+            }
+        }
+
+        function saveAndRender() {
+            localStorage.setItem('perchance_games', JSON.stringify(games));
             renderGames();
         }
 
-        function saveGames() {
-            localStorage.setItem('perchance_hub_games', JSON.stringify(games));
-        }
-
-        // Render category filters
-        function renderCategories() {
-            const container = document.getElementById('categoryFilters');
-            const categories = ['Wszystkie', ...new Set(games.map(g => g.category || 'Inne').filter(Boolean))];
-            
-            container.innerHTML = categories.map(cat => `
-                <button onclick="filterByCategory('${cat}')" 
-                    class="category-btn px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all shadow-sm ${currentCategory === cat ? 'bg-emerald-500 text-slate-950 font-semibold' : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800'}" 
-                    data-category="${cat}">
-                    ${cat}
-                </button>
-            `).join('');
-        }
-
-        // Filter games by category
-        function filterByCategory(category) {
-            currentCategory = category;
-            renderCategories();
-            renderGames();
-        }
-
-        // Filter and search games grid
         function renderGames() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const grid = document.getElementById('gamesGrid');
-            const emptyState = document.getElementById('emptyState');
+            const container = document.getElementById('games-container');
+            container.innerHTML = '';
 
-            const filtered = games.filter(game => {
-                const matchesCategory = currentCategory === 'Wszystkie' || (game.category || 'Inne') === currentCategory;
-                const matchesSearch = game.title.toLowerCase().includes(searchTerm) || (game.description && game.description.toLowerCase().includes(searchTerm));
-                return matchesCategory && matchesSearch;
-            });
+            games.forEach(game => {
+                const card = document.createElement('div');
+                card.className = 'game-card';
+                
+                let commentsHtml = (game.comments || []).map(c => `
+                    <div class="comment-item">
+                        <span class="comment-author">${escapeHtml(c.author)}:</span> ${escapeHtml(c.text)}
+                    </div>
+                `).join('');
 
-            if (filtered.length === 0) {
-                grid.innerHTML = '';
-                emptyState.classList.remove('hidden');
-                emptyState.classList.add('flex');
-                return;
-            }
-
-            emptyState.classList.remove('flex');
-            emptyState.classList.add('hidden');
-
-            grid.innerHTML = filtered.map(game => `
-                <div class="group bg-slate-900/90 border border-slate-800/80 hover:border-emerald-500/50 rounded-2xl p-5 flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/5 relative overflow-hidden">
-                    <!-- Top accent glow on hover -->
-                    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    
-                    <div>
-                        <div class="flex items-start justify-between mb-3">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-12 h-12 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
-                                    ${game.emoji || '🎮'}
-                                </div>
-                                <div>
-                                    <span class="inline-block px-2.5 py-0.5 rounded-md text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mb-1">
-                                        ${game.category || 'Inne'}
-                                    </span>
-                                    <h3 class="font-bold text-slate-100 text-base leading-tight group-hover:text-emerald-400 transition-colors line-clamp-1">${escapeHtml(game.title)}</h3>
-                                </div>
-                            </div>
-                            
-                            <!-- Action dropdown / buttons -->
-                            <div class="flex items-center space-x-1 opacity-80 group-hover:opacity-100 transition-opacity">
-                                <button onclick="openEditModal('${game.id}')" title="Edytuj" class="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800 flex items-center justify-center transition-colors">
-                                    <i class="fa-solid fa-pen text-xs"></i>
-                                </button>
-                                <button onclick="deleteGame('${game.id}')" title="Usuń" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 flex items-center justify-center transition-colors">
-                                    <i class="fa-solid fa-trash text-xs"></i>
-                                </button>
-                            </div>
+                card.innerHTML = `
+                    <img src="${game.image}" alt="${escapeHtml(game.title)}">
+                    <div class="game-info">
+                        <h2 class="game-title">${escapeHtml(game.title)}</h2>
+                        <p class="game-desc">${escapeHtml(game.desc)}</p>
+                        
+                        <div class="card-footer">
+                            <a href="${game.url}" target="_blank" class="play-link" onclick="trackClick(${game.id})">🎮 Graj</a>
+                            <span class="clicks-count">🔥 Zagrało: ${game.clicks || 0}</span>
                         </div>
 
-                        <p class="text-slate-400 text-xs line-clamp-2 mb-4 leading-relaxed">${escapeHtml(game.description || 'Brak opisu dla tej gry.')}</p>
+                        ${isAdmin ? `<button onclick="deleteGame(${game.id})" style="background:var(--danger); color:white; border:none; padding:5px; margin-top:10px; border-radius:4px; cursor:pointer;">Usuń grę</button>` : ''}
+
+                        <div class="comments-section">
+                            <strong>Komentarze:</strong>
+                            ${commentsHtml || '<p style="font-size:0.8rem; color:var(--text-muted); margin-top:5px;">Brak komentarzy. Bądź pierwszy!</p>'}
+                            
+                            <div class="add-comment">
+                                <input type="text" id="author-${game.id}" placeholder="Twój nick" style="width:30%;">
+                                <input type="text" id="text-${game.id}" placeholder="Napisz komentarz..." style="width:50%;">
+                                <button onclick="addComment(${game.id})">Wyślij</button>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="pt-3 border-t border-slate-800/60 flex items-center justify-between">
-                        <span class="text-[11px] text-slate-500 truncate max-w-[150px]"><i class="fa-solid fa-link mr-1"></i>${escapeHtml(game.link)}</span>
-                        <a href="${escapeHtml(game.link)}" target="_blank" rel="noopener noreferrer" 
-                            class="bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-slate-950 border border-emerald-500/20 font-semibold px-4 py-2 rounded-xl text-xs transition-all flex items-center space-x-1.5 shadow-sm">
-                            <span>Zagraj</span>
-                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-                        </a>
-                    </div>
-                </div>
-            `).join('');
+                `;
+                container.appendChild(card);
+            });
         }
 
-        function filterGames() {
-            renderGames();
-        }
-
-        // Modal Controls
-        function openModal() {
-            document.getElementById('gameId').value = '';
-            document.getElementById('gameForm').reset();
-            document.getElementById('gameEmoji').value = '🎮';
-            document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-gamepad text-emerald-400 mr-2"></i>Dodaj nową grę';
-            
-            const modal = document.getElementById('gameModal');
-            const content = document.getElementById('modalContent');
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                content.classList.remove('scale-95');
-                content.classList.add('scale-100');
-            }, 10);
-        }
-
-        function openEditModal(id) {
-            const game = games.find(g => g.id === id);
-            if (!game) return;
-
-            document.getElementById('gameId').value = game.id;
-            document.getElementById('gameTitle').value = game.title;
-            document.getElementById('gameLink').value = game.link;
-            document.getElementById('gameCategory').value = game.category || '';
-            document.getElementById('gameEmoji').value = game.emoji || '🎮';
-            document.getElementById('gameDescription').value = game.description || '';
-            document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-pen-to-square text-emerald-400 mr-2"></i>Edytuj grę';
-
-            const modal = document.getElementById('gameModal');
-            const content = document.getElementById('modalContent');
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                content.classList.remove('scale-95');
-                content.classList.add('scale-100');
-            }, 10);
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('gameModal');
-            const content = document.getElementById('modalContent');
-            modal.classList.add('opacity-0');
-            content.classList.remove('scale-100');
-            content.classList.add('scale-95');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
-        }
-
-        // Form Submit Handler (Add or Edit)
-        function handleFormSubmit(event) {
-            event.preventDefault();
-            const id = document.getElementById('gameId').value;
-            const title = document.getElementById('gameTitle').value.trim();
-            const link = document.getElementById('gameLink').value.trim();
-            const category = document.getElementById('gameCategory').value.trim() || 'Inne';
-            const emoji = document.getElementById('gameEmoji').value.trim() || '🎮';
-            const description = document.getElementById('gameDescription').value.trim();
-
-            if (id) {
-                // Edit existing
-                games = games.map(g => g.id === id ? { id, title, link, category, emoji, description } : g);
-                showToast('Gra została pomyślnie zaktualizowana!');
-            } else {
-                // Add new
-                const newGame = {
-                    id: Date.now().toString(),
-                    title,
-                    link,
-                    category,
-                    emoji,
-                    description
-                };
-                games.unshift(newGame);
-                showToast('Nowa gra została dodana!');
-            }
-
-            saveGames();
-            renderCategories();
-            renderGames();
-            closeModal();
-        }
-
-        // Delete game
-        function deleteGame(id) {
-            if (confirm('Czy na pewno chcesz usunąć tę grę z listy?')) {
-                games = games.filter(g => g.id !== id);
-                saveGames();
-                renderCategories();
-                renderGames();
-                showToast('Gra została usunięta.');
-            }
-        }
-
-        // Toast Helper
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            const msgEl = document.getElementById('toastMessage');
-            msgEl.textContent = message;
-
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
-        }
-
-        // Security escape helper
         function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace('&', '&amp;')
-                      .replace('<', '&lt;')
-                      .replace('>', '&gt;')
-                      .replace('"', '&quot;')
-                      .replace("'", '&#039;');
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
         }
 
-        // Initialize on load
-        window.onload = initApp;
+        // Start
+        updatePageViews();
+        renderGames();
     </script>
 </body>
 </html>
